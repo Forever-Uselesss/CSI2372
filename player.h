@@ -12,7 +12,8 @@ private:
   std::string name;
   int rubies = 0;
   bool active = true;
-  Side side;
+  Side side=Side::BOTTOM;
+  std::vector<Card> hand;
   bool endOfGameDisplay = false;
 
 public:

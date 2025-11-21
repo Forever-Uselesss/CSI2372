@@ -4,10 +4,12 @@
 #include <string>
 #include <vector>
 
-enum class Side { TOP, BOTTOM, LEFT, RIGHT };
+// enum class Side { TOP, BOTTOM, LEFT, RIGHT };
 
-static const char *sideToString(Side s) {
-  switch (s) {
+static const char *sideToString(Side s)
+{
+  switch (s)
+  {
   case Side::TOP:
     return "top";
   case Side::BOTTOM:
@@ -20,44 +22,48 @@ static const char *sideToString(Side s) {
   return "unknown";
 }
 
-class Player {
-private:
-  std::string name;
-  int rubies = 0;
-  bool active = true;
-  Side side = Side::BOTTOM;
-  std::vector<Card> hand;
-  bool endOfGameDisplay = false;
+// class Player {
+// private:
+//   std::string name;
+//   int rubies = 0;
+//   bool active = true;
+//   Side side = Side::BOTTOM;
+//   std::vector<Card> hand;
+//   bool endOfGameDisplay = false;
 
-public:
-  Player() = default;
-  Player(const std::string &playerName, Side s = Side::BOTTOM) : name(playerName), rubies(0), active(true), side(s) {}
+// public:
+// Player() = default;
 
-  std::string getName() const { return name; }
+Player::Player(const std::string &playerName, Side s) : name(playerName), rubies(0), active(true), side(s) {}
 
-  void setActive(bool status) { active = status; }
+std::string Player::getName() const { return name; }
 
-  bool isActive() const { return active; }
+void Player::setActive(bool status) { active = status; }
 
-  int getNRubies() const { return rubies; }
+bool Player::isActive() const { return active; }
 
-  // Accept an integer number of rubies
-  void addRubis(int value) { rubies += value; }
+int Player::getNRubies() const { return rubies; }
 
-  // Generic overload: accepts any type that provides getValue()
-  template <typename T> void addRubis(const T &r) { rubies += r.getValue(); }
+// Accept an integer number of rubies
+void Player::addRubis(int value) { rubies += value; }
 
-  void setDisplayMode(bool endOfGame) { endOfGameDisplay = endOfGame; }
+// // Generic overload: accepts any type that provides getValue()
+// template <typename T> void addRubis(const T &r) { rubies += r.getValue(); }
 
-  Side getSide() const { return side; }
-  void setSide(Side s) { side = s; }
+void Player::setDisplayMode(bool endOfGame) { endOfGameDisplay = endOfGame; }
 
-  friend std::ostream &operator<<(std::ostream &os, const Player &p) {
-    if (p.endOfGameDisplay) {
-      os << p.name << ": " << p.rubies << " rubies";
-    } else {
-      os << p.name << ": " << sideToString(p.side) << " (" << (p.active ? "active" : "inactive") << ")";
-    }
-    return os;
+Side Player::getSide() const { return side; }
+void Player::setSide(Side s) { side = s; }
+
+std::ostream &operator<<(std::ostream &os, const Player &p)
+{
+  if (p.endOfGameDisplay)
+  {
+    os << p.name << ": " << p.rubies << " rubies";
   }
-};
+  else
+  {
+    os << p.name << ": " << sideToString(p.side) << " (" << (p.active ? "active" : "inactive") << ")";
+  }
+  return os;
+}

@@ -5,7 +5,8 @@
 #include "player.h"
 #include <vector>
 
-class Game {
+class Game
+{
 private:
   Board board;
   std::vector<Player> players;
@@ -22,7 +23,9 @@ public:
   void setCurrentCard(const Card *card);
   Card *getCard(const Letter &letter, const Number &number);
   void setCard(const Letter &letter, const Number &number, Card *card);
+  std::vector<Player> &getPlayers();
   const std::vector<Player> &getPlayers() const;
+
   Board &getBoard();
   friend std::ostream &operator<<(std::ostream &os, const Game &game);
   void resetBoard();

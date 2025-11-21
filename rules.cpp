@@ -1,12 +1,12 @@
 #include "rules.h" // Ensure this includes the Rules class definition
 #include "game.h"  // Ensure this includes the Game class definition
 
-class Rules {
-public:
-  // Maximum number of rounds in the game
-  static constexpr int MAX_ROUND = 7;
+// class Rules {
+// public:
+//   // Maximum number of rounds in the game
+//   static constexpr int MAX_ROUND = 7;
   // Check if the current selection is valid (previous and current cards match)
-  bool isValid(const Game &game) {
+  bool Rules:: isValid(const Game &game) {
     const Card *previousCard = game.getPreviousCard();
     const Card *currentCard = game.getCurrentCard();
 
@@ -20,10 +20,10 @@ public:
   }
 
   // Check if the game is over (7 rounds completed)
-  bool gameOver(const Game &game) { return game.getRound() >= MAX_ROUND; }
+  bool Rules::gameOver(const Game &game) { return game.getRound() >= MAX_ROUND; }
 
   // Check if the round is over (only one active player left)
-  bool roundOver(const Game &game) {
+  bool Rules::roundOver(const Game &game) {
     int activePlayers = 0;
     for (const auto &player : game.getPlayers()) {
       if (player.isActive()) {
@@ -34,7 +34,7 @@ public:
   }
 
   // Get the next player in the game
-  const Player &getNextPlayer(const Game &game) {
+  const Player &Rules:: getNextPlayer(const Game &game) {
     static size_t currentIndex = 0;
 
     // Find the next active player
@@ -48,4 +48,3 @@ public:
 
     throw std::runtime_error("No active players left.");
   }
-};

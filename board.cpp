@@ -94,4 +94,15 @@ void Board::validatePosition(const Letter &letter, const Number &number) const {
   if (static_cast<int>(letter) < 0 || static_cast<int>(letter) >= ROWS || static_cast<int>(number) < 1 || static_cast<int>(number) > COLS) {
     throw OutOfRange();
   }
+
+
+}
+
+
+const char* OutOfRange::what() const noexcept {
+    return "Board position out of range!";
+}
+
+const char* NoMoreCards::what() const noexcept {
+    return "No more cards left!";
 }
