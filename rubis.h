@@ -18,6 +18,7 @@ public:
 
      static constexpr int MIN_VALUE = 1;
     static constexpr int MAX_VALUE = 4;
+    friend std::ostream &operator<<(std::ostream &os, const Rubis &r);
 
 private:
 explicit Rubis(int v);
@@ -25,10 +26,10 @@ explicit Rubis(int v);
     int value_;
 
     friend class RubisDeck;
-    friend std::ostream &operator<<(std::ostream &os, const Rubis &r);
+    
 
 };
-std::ostream &operator<<(std::ostream &os, const Rubis &r);
+
 
 
 #endif // RUBIS_H
