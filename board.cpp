@@ -7,9 +7,18 @@
 // Constructor
 Board::Board() {
   // Initialize the grid with nullptr (no cards initially)
-  for (auto &row : grid) {
-    row.fill(nullptr);
-  }
+  // for (auto &row : grid) {
+  //   row.fill(nullptr);
+  // }
+    for (int r = 0; r < ROWS; ++r) {
+        for (int c = 0; c < COLS; ++c) {
+            // temp dumb random cards — so the game works
+            FaceAnimal a = static_cast<FaceAnimal>(r % 5);
+            FaceBackground bg = static_cast<FaceBackground>(c % 5);
+
+            grid[r][c] = new Card(a, bg);
+        }
+    }
 }
 
 // Display the board

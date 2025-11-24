@@ -35,6 +35,7 @@ int main()
     Rules rules;
     std::cout << game;
 
+
     // Main game loop
     while (!rules.gameOver(game))
     {

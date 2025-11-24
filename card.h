@@ -14,6 +14,7 @@ private:
   Card(FaceAnimal a, FaceBackground c);
 
   friend class CardDeck;
+  friend class Board;
 
 public:
   operator FaceAnimal() const;
