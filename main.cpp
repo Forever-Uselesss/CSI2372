@@ -40,6 +40,8 @@ int main()
     while (!rules.gameOver(game))
     {
         std::cout << "\n--- New Round ---\n";
+        //add the round
+        game.nextRound();
         game.resetBoard();
         game.resetPlayers();
 

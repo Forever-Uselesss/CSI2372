@@ -16,6 +16,8 @@ private:
 
 public:
   int getRound() const;
+  void nextRound();
+
   void addPlayer(const Player &player);
   Player &getPlayer(Side side);
   const Card *getPreviousCard() const;
