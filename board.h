@@ -26,7 +26,7 @@ private:
 
 public:
   Board();
-  void display() const;
+  void display(bool expertMode = false) const; // Add the parameter with default value
   bool isFaceUp(const Letter &letter, const Number &number) const;
   bool turnFaceUp(const Letter &letter, const Number &number);
   bool turnFaceDown(const Letter &letter, const Number &number);

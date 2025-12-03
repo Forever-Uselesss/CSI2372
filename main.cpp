@@ -1,7 +1,13 @@
-#include "game.h"
+#include "board.h"
+#include "carddeck.h"
+#include "game.h"      // Add this
+#include "player.h"    // Add this
+#include "rubis.h"     // Add this
+#include "rubisdeck.h" // Add this
 #include "rules.h"
 #include <algorithm>
 #include <iostream>
+#include <limits> // Add this for buffer flushing
 #include <string>
 #include <vector>
 
@@ -43,27 +49,52 @@ int main() {
     // Temporarily reveal 3 cards in front of each player
     for (auto &player : game.getPlayers()) {
       Side side = player.getSide();
-      Letter startRow = (side == Side::TOP) ? Letter::A : (side == Side::BOTTOM) ? Letter::E : Letter::C;
-      Number startCol = (side == Side::LEFT) ? Number::ONE : (side == Side::RIGHT) ? Number::FIVE : Number::THREE;
+      std::vector<std::pair<Letter, Number>> positions;
 
-      for (int i = 0; i < 3; ++i) {
-        Letter row = static_cast<Letter>(static_cast<int>(startRow) + (side == Side::TOP || side == Side::BOTTOM ? 0 : i));
-        Number col = static_cast<Number>(static_cast<int>(startCol) + (side == Side::LEFT || side == Side::RIGHT ? 0 : i));
+      switch (side) {
+      case Side::TOP:
+        positions = {{Letter::A, Number::TWO}, {Letter::A, Number::THREE}, {Letter::A, Number::FOUR}};
+        break;
+      case Side::BOTTOM:
+        positions = {{Letter::E, Number::TWO}, {Letter::E, Number::THREE}, {Letter::E, Number::FOUR}};
+        break;
+      case Side::LEFT:
+        positions = {{Letter::B, Number::ONE}, {Letter::C, Number::ONE}, {Letter::D, Number::ONE}};
+        break;
+      case Side::RIGHT:
+        positions = {{Letter::B, Number::FIVE}, {Letter::C, Number::FIVE}, {Letter::D, Number::FIVE}};
+        break;
+      }
 
-        Card *c = game.getCard(row, col);
-        if (c)
+      for (const auto &pos : positions) {
+        Card *c = game.getCard(pos.first, pos.second);
+        if (c) {
           c->uncover();
+        }
       }
     }
 
     // Round loop
+    size_t currentPlayerIndex = 0;
     while (!rules.roundOver(game)) {
       // Get next active player
-      Player &currentPlayer = const_cast<Player &>(rules.getNextPlayer(game));
-      if (!currentPlayer.isActive())
-        continue;
+      auto &players = game.getPlayers();
+      Player *currentPlayer = nullptr;
 
-      std::cout << "\nIt's " << currentPlayer.getName() << "'s turn.\n";
+      // Find next active player
+      for (size_t attempts = 0; attempts < players.size(); ++attempts) {
+        if (players[currentPlayerIndex].isActive()) {
+          currentPlayer = &players[currentPlayerIndex];
+          break;
+        }
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+      }
+
+      if (!currentPlayer) {
+        break; // No active players left
+      }
+
+      std::cout << "\nIt's " << currentPlayer->getName() << "'s turn.\n";
 
       // Get player input
       char rowChar;
@@ -71,7 +102,9 @@ int main() {
       while (true) {
         std::cout << "Enter card to turn face up (e.g., A1): ";
         std::cin >> rowChar >> colNum;
-
+        if (rowChar == 'C' && colNum == 3) {
+          std::cout << "Debug: Selected C3\n";
+        }
         if (rowChar < 'A' || rowChar > 'E' || colNum < 1 || colNum > 5) {
           std::cin.clear();  // Clear the error flag
           std::cin.ignore(); // Flush buffer
@@ -100,36 +133,46 @@ int main() {
 
       // Check if the selection is valid
       if (!rules.isValid(game)) {
-        std::cout << "Invalid selection! " << currentPlayer.getName() << " is out of the round.\n";
-        currentPlayer.setActive(false);
+        std::cout << "Invalid selection! " << currentPlayer->getName() << " is out of the round.\n";
+        currentPlayer->setActive(false);
       }
 
       // Display current game state
-      std::cout << game;
+      if (version == 2) {
+        game.getBoard().display(true); // Expert mode - only show face-up cards
+      } else {
+        std::cout << game; // Normal display
+      }
+
+      // Move to next player
+      currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
     }
 
     // Award rubies to remaining active player(s)
+    RubisDeck &rubisDeck = RubisDeck::make_RubisDeck();
     for (auto &player : game.getPlayers()) {
       if (player.isActive()) {
-        player.addRubis(1);
-        std::cout << player.getName() << " wins the round and receives 1 ruby!\n";
+        Rubis *rubis = rubisDeck.getNext();
+        int rubiesAwarded = rubis ? rubis->getValue() : 1; // Fallback to 1 if deck empty
+        player.addRubis(rubiesAwarded);
+        std::cout << player.getName() << " wins the round and receives " << rubiesAwarded << " rubies!\n";
       }
     }
   }
 
-  // Print final scores sorted by rubies
+  // Print final scores sorted by rubies (descending order)
   auto players = game.getPlayers();
-  std::sort(players.begin(), players.end(), [](const Player &a, const Player &b) { return a.getNRubies() < b.getNRubies(); });
+  std::sort(players.begin(), players.end(), [](const Player &a, const Player &b) {
+    return a.getNRubies() > b.getNRubies(); // Sort in descending order
+  });
 
   std::cout << "\n--- Final Scores ---\n";
   for (const auto &player : players) {
     std::cout << player.getName() << ": " << player.getNRubies() << " rubies\n";
   }
 
-  // Print overall winner
-  const Player &winner =
-      *std::max_element(players.begin(), players.end(), [](const Player &a, const Player &b) { return a.getNRubies() < b.getNRubies(); });
-  std::cout << "The overall winner is " << winner.getName() << " with " << winner.getNRubies() << " rubies!\n";
+  // Print overall winner (first in sorted list)
+  std::cout << "The overall winner is " << players[0].getName() << " with " << players[0].getNRubies() << " rubies!\n";
 
   return 0;
 }

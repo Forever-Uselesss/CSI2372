@@ -1,4 +1,6 @@
 #include "board.h" // Ensure this includes the Card class definition
+#include "card.h"
+#include "carddeck.h"
 #include <array>
 #include <iostream>
 #include <stdexcept>
@@ -10,30 +12,48 @@ Board::Board() {
   // for (auto &row : grid) {
   //   row.fill(nullptr);
   // }
-    for (int r = 0; r < ROWS; ++r) {
-        for (int c = 0; c < COLS; ++c) {
-            // temp dumb random cards — so the game works
-            FaceAnimal a = static_cast<FaceAnimal>(r % 5);
-            FaceBackground bg = static_cast<FaceBackground>(c % 5);
+  for (int r = 0; r < ROWS; ++r) {
+    for (int c = 0; c < COLS; ++c) {
+      // temp dumb random cards — so the game works
+      FaceAnimal a = static_cast<FaceAnimal>(r % 5);
+      FaceBackground bg = static_cast<FaceBackground>(c % 5);
 
-            grid[r][c] = new Card(a, bg);
-        }
+      grid[r][c] = new Card(a, bg);
     }
+  }
 }
 
-// Display the board
-void Board::display() const {
-  std::cout << "  1  2  3  4  5\n";
-  for (int i = 0; i < ROWS; ++i) {
-    std::cout << static_cast<char>('A' + i) << " ";
-    for (int j = 0; j < COLS; ++j) {
-      if (grid[i][j] && grid[i][j]->isUncovered()) {
-        std::cout << grid[i][j]->toString() << " ";
+void Board::display(bool expertMode) const {
+  std::cout << "   1   2   3   4   5\n";
+
+  for (int boardRow = 0; boardRow < ROWS; ++boardRow) {
+    for (int cardRow = 0; cardRow < 3; ++cardRow) {
+      if (cardRow == 1) {
+        std::cout << static_cast<char>('A' + boardRow) << " ";
       } else {
-        std::cout << "zzz ";
+        std::cout << "  ";
       }
+
+      for (int boardCol = 0; boardCol < COLS; ++boardCol) {
+        // Center position (2,2) is empty
+        if (boardRow == 2 && boardCol == 2) {
+          std::cout << "    ";
+          continue;
+        }
+
+        Card *card = grid[boardRow][boardCol];
+        if (card) {
+          if (expertMode && !card->isUncovered()) {
+            std::cout << "    "; // Don't show face-down cards in expert mode
+          } else {
+            std::cout << card->operator()(cardRow) << " ";
+          }
+        } else {
+          std::cout << "    ";
+        }
+      }
+      std::cout << "\n";
     }
-    std::cout << "\n";
   }
 }
 
@@ -94,7 +114,7 @@ void Board::allFacesDown() {
 
 // Overload the insertion operator for printing the board
 std::ostream &operator<<(std::ostream &os, const Board &board) {
-  board.display();
+  board.display(false); // Use false for normal display
   return os;
 }
 
@@ -103,15 +123,8 @@ void Board::validatePosition(const Letter &letter, const Number &number) const {
   if (static_cast<int>(letter) < 0 || static_cast<int>(letter) >= ROWS || static_cast<int>(number) < 1 || static_cast<int>(number) > COLS) {
     throw OutOfRange();
   }
-
-
 }
 
+const char *OutOfRange::what() const noexcept { return "Board position out of range!"; }
 
-const char* OutOfRange::what() const noexcept {
-    return "Board position out of range!";
-}
-
-const char* NoMoreCards::what() const noexcept {
-    return "No more cards left!";
-}
+const char *NoMoreCards::what() const noexcept { return "No more cards left!"; }
