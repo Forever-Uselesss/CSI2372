@@ -21,6 +21,7 @@ public:
   static constexpr int MAX_VALUE = 4;
   friend std::ostream &operator<<(std::ostream &os, const Rubis &r);
   // explicit Rubis(int v);
+  //cant push??
 
 private:
   int value_;
