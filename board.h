@@ -21,6 +21,7 @@ private:
   static constexpr int ROWS = 5;
   static constexpr int COLS = 5;
   std::array<std::array<Card *, COLS>, ROWS> grid;
+  bool expertDisplayMode = false;
 
   void validatePosition(const Letter &letter, const Number &number) const;
 
@@ -34,6 +35,8 @@ public:
   void setCard(const Letter &letter, const Number &number, Card *card);
   void allFacesDown();
   friend std::ostream &operator<<(std::ostream &os, const Board &board);
+  void setExpertDisplayMode(bool mode);
+  bool getExpertDisplayMode() const;
 };
 
 #endif // BOARD_H

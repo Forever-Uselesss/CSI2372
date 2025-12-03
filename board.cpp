@@ -125,9 +125,13 @@ void Board::allFacesDown() {
   }
 }
 
+void Board::setExpertDisplayMode(bool mode) { expertDisplayMode = mode; }
+
+bool Board::getExpertDisplayMode() const { return expertDisplayMode; }
+
 // Overload the insertion operator for printing the board
 std::ostream &operator<<(std::ostream &os, const Board &board) {
-  board.display(false); // Use false for normal display
+  board.display(board.getExpertDisplayMode()); // Use false for normal display
   return os;
 }
 

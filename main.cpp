@@ -58,6 +58,13 @@ int main() {
   std::vector<std::string> playerNames(numPlayers);
   std::vector<Side> sides = {Side::TOP, Side::BOTTOM, Side::LEFT, Side::RIGHT};
   Game game;
+  // set expert mode based on version
+  if (version == 2 || version == 4) {
+    game.getBoard().setExpertDisplayMode(true);
+  } else {
+    game.getBoard().setExpertDisplayMode(false);
+  }
+
   for (int i = 0; i < numPlayers; ++i) {
     std::cout << "Enter name for player " << (i + 1) << ": ";
     std::cin >> playerNames[i];
