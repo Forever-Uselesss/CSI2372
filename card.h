@@ -14,12 +14,13 @@ private:
   FaceAnimal animal;
   FaceBackground color;
   bool uncovered;
+    Card(FaceAnimal a, FaceBackground c); //made private card
 
   // Private constructor - can only be called by friend classes
   // Card(FaceAnimal a, FaceBackground c);
 
 public:
-  Card(FaceAnimal a, FaceBackground c);
+  // Card(FaceAnimal a, FaceBackground c);
   void uncover();
   void cover();
   bool isUncovered() const;
