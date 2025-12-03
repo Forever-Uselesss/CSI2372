@@ -6,10 +6,8 @@
 
 // enum class Side { TOP, BOTTOM, LEFT, RIGHT };
 
-static const char *sideToString(Side s)
-{
-  switch (s)
-  {
+static const char *sideToString(Side s) {
+  switch (s) {
   case Side::TOP:
     return "top";
   case Side::BOTTOM:
@@ -44,8 +42,7 @@ bool Player::isActive() const { return active; }
 
 int Player::getNRubies() const { return rubies; }
 
-// Accept an integer number of rubies
-void Player::addRubis(int value) { rubies += value; }
+void Player::addRubis(const Rubis &rubis) { rubies += rubis.getValue(); }
 
 // // Generic overload: accepts any type that provides getValue()
 // template <typename T> void addRubis(const T &r) { rubies += r.getValue(); }
@@ -55,14 +52,10 @@ void Player::setDisplayMode(bool endOfGame) { endOfGameDisplay = endOfGame; }
 Side Player::getSide() const { return side; }
 void Player::setSide(Side s) { side = s; }
 
-std::ostream &operator<<(std::ostream &os, const Player &p)
-{
-  if (p.endOfGameDisplay)
-  {
+std::ostream &operator<<(std::ostream &os, const Player &p) {
+  if (p.endOfGameDisplay) {
     os << p.name << ": " << p.rubies << " rubies";
-  }
-  else
-  {
+  } else {
     os << p.name << ": " << sideToString(p.side) << " (" << (p.active ? "active" : "inactive") << ")";
   }
   return os;

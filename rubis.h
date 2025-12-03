@@ -1,32 +1,31 @@
 #ifndef RUBIS_H
 #define RUBIS_H
-
 #include <iostream>
-#include <ostream>
-#include <stdexcept>
+
+// Forward declarations
+template <typename C> class DeckFactory;
+class RubisDeck;
 
 class Rubis {
+  // Declare friends FIRST, before private section
   friend class RubisDeck;
-
-public:
-  // Conversion to int (public)
-  explicit operator int() const noexcept;
-  int getValue() const noexcept;
-  Rubis(const Rubis &) = default;
-  Rubis(Rubis &&) = default;
-  Rubis &operator=(const Rubis &) = default;
-  Rubis &operator=(Rubis &&) = default;
-
-  static constexpr int MIN_VALUE = 1;
-  static constexpr int MAX_VALUE = 4;
-  friend std::ostream &operator<<(std::ostream &os, const Rubis &r);
-  // explicit Rubis(int v);
-  //cant push??
+  friend class DeckFactory<Rubis>;
+  template <typename T> friend class DeckFactory;
 
 private:
-  int value_;
-  // Private constructor only from rubisdeck
+  int value;
+
+  // Private constructor - only friends can access
   explicit Rubis(int v);
+
+public:
+  int getValue() const;
+
+  // Conversion operator to int as required by PDF
+  operator int() const;
+
+  // Support for cout << rubis
+  friend std::ostream &operator<<(std::ostream &os, const Rubis &rubis);
 };
 
 #endif // RUBIS_H

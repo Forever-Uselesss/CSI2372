@@ -2,36 +2,40 @@
 #define GAME_H
 
 #include "board.h"
+#include "card.h"
 #include "player.h"
 #include <vector>
 
-class Game
-{
+class Game {
 private:
   Board board;
   std::vector<Player> players;
-  int currentRound = 0;
-  const Card *previousCard = nullptr;
-  const Card *currentCard = nullptr;
+  int currentRound;
+  const Card *previousCard;
+  const Card *currentCard;
 
 public:
-  int getRound() const;
-  void nextRound();
+  Game();
 
+  int getRound() const;
   void addPlayer(const Player &player);
-  Player &getPlayer(Side side);
-  const Card *getPreviousCard() const;
-  const Card *getCurrentCard() const;
-  void setCurrentCard(const Card *card);
-  Card *getCard(const Letter &letter, const Number &number);
-  void setCard(const Letter &letter, const Number &number, Card *card);
   std::vector<Player> &getPlayers();
   const std::vector<Player> &getPlayers() const;
 
+  const Card *getPreviousCard() const;
+  const Card *getCurrentCard() const;
+  void setCurrentCard(const Card *card);
+
+  Card *getCard(const Letter &letter, const Number &number);
+  void setCard(const Letter &letter, const Number &number, Card *card);
+
   Board &getBoard();
-  friend std::ostream &operator<<(std::ostream &os, const Game &game);
+  const Board &getBoard() const;
   void resetBoard();
   void resetPlayers();
+  void nextRound();
+
+  friend std::ostream &operator<<(std::ostream &os, const Game &game);
 };
 
 #endif // GAME_H

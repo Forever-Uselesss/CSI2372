@@ -14,7 +14,7 @@ private:
   FaceAnimal animal;
   FaceBackground color;
   bool uncovered;
-    Card(FaceAnimal a, FaceBackground c); //made private card
+  Card(FaceAnimal a, FaceBackground c); // made private card
 
   // Private constructor - can only be called by friend classes
   // Card(FaceAnimal a, FaceBackground c);

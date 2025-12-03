@@ -5,19 +5,15 @@
 #include <cstddef>
 #include <vector>
 
-template <typename C>
-class DeckFactory
-{
+template <typename C> class DeckFactory {
 protected:
-  std::vector<C*> items; //push back new rubic works
+  std::vector<C *> items; // push back new rubic works
   std::size_t nextIndex = 0;
 
 public:
   DeckFactory() = default;
-  virtual ~DeckFactory()
-  {
-    for (C *item : items)
-    {
+  virtual ~DeckFactory() {
+    for (C *item : items) {
       delete item;
     }
   }
@@ -26,22 +22,20 @@ public:
   virtual void build() = 0;
 
   // Shuffle using the required std::random_shuffle
-  void shuffle()
-  {
-    if (!items.empty())
-    {
+  void shuffle() {
+    if (!items.empty()) {
       std::random_shuffle(items.begin(), items.end());
       nextIndex = 0;
     }
   }
 
   // Return pointer to next element or nullptr if none left
-  C *getNext()
-  {
+  C *getNext() {
     if (isEmpty())
       return nullptr;
     return items[nextIndex++];
   }
+  void addItem(C *item) { items.push_back(item); }
 
   bool isEmpty() const { return nextIndex >= items.size(); }
 

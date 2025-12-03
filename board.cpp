@@ -8,17 +8,28 @@
 
 // Constructor
 Board::Board() {
-  // Initialize the grid with nullptr (no cards initially)
-  // for (auto &row : grid) {
-  //   row.fill(nullptr);
-  // }
+  // Initialize all positions to nullptr first
+  for (auto &row : grid) {
+    row.fill(nullptr);
+  }
+
+  // Get cards from CardDeck and place them (except center C3)
+  CardDeck &deck = CardDeck::make_CardDeck();
+  deck.shuffle();
+
   for (int r = 0; r < ROWS; ++r) {
     for (int c = 0; c < COLS; ++c) {
-      // temp dumb random cards — so the game works
-      FaceAnimal a = static_cast<FaceAnimal>(r % 5);
-      FaceBackground bg = static_cast<FaceBackground>(c % 5);
+      // Skip center position (C3 = 2,2)
+      if (r == 2 && c == 2) {
+        continue; // Leave as nullptr
+      }
 
-      grid[r][c] = new Card(a, bg);
+      Card *card = deck.getNext();
+      if (card) {
+        grid[r][c] = card;
+      } else {
+        throw NoMoreCards();
+      }
     }
   }
 }
@@ -54,7 +65,9 @@ void Board::display(bool expertMode) const {
       }
       std::cout << "\n";
     }
+    std::cout << "\n";
   }
+  std::cout << "\n";
 }
 
 // Check if a card is face up

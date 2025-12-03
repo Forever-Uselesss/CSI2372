@@ -6,6 +6,7 @@
 
 class RubisDeck : public DeckFactory<Rubis> {
   friend class Rubis;
+
 private:
   RubisDeck();
   RubisDeck(const RubisDeck &) = delete;

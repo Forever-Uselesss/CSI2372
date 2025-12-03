@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include "card.h"
+#include "rubis.h"
 #include <string>
 #include <vector>
 
@@ -12,7 +13,7 @@ private:
   std::string name;
   int rubies = 0;
   bool active = true;
-  Side side=Side::BOTTOM;
+  Side side = Side::BOTTOM;
   std::vector<Card> hand;
   bool endOfGameDisplay = false;
 
@@ -24,7 +25,7 @@ public:
   void setActive(bool status);
   bool isActive() const;
   int getNRubies() const;
-  void addRubis(int value);
+  void addRubis(const Rubis &rubis); // Change signature
   void setDisplayMode(bool endOfGame);
   Side getSide() const;
   void setSide(Side s);

@@ -9,7 +9,9 @@ void CardDeck::build() {
   items.reserve(5 * 5);
   for (FaceAnimal a : {FaceAnimal::CRAB, FaceAnimal::PENGUIN, FaceAnimal::OCTOPUS, FaceAnimal::TURTLE, FaceAnimal::WALRUS}) {
     for (FaceBackground b : {FaceBackground::RED, FaceBackground::GREEN, FaceBackground::PURPLE, FaceBackground::BLUE, FaceBackground::YELLOW}) {
-      items.emplace_back(a, b); // Allowed because CardDeck is a friend of Card
+      // items.emplace_back(a, b); // Allowed because CardDeck is a friend of Card
+
+      addItem(new Card(a, b));
     }
   }
   nextIndex = 0;
