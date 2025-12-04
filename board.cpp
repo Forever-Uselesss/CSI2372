@@ -35,35 +35,83 @@ Board::Board() {
 }
 
 void Board::display(bool expertMode) const {
-  std::cout << "   1   2   3   4   5\n";
+  if (!expertMode) {
+    // Normal display mode (your existing code)
+    std::cout << "   1   2   3   4   5\n";
 
-  for (int boardRow = 0; boardRow < ROWS; ++boardRow) {
-    for (int cardRow = 0; cardRow < 3; ++cardRow) {
-      if (cardRow == 1) {
-        std::cout << static_cast<char>('A' + boardRow) << " ";
-      } else {
-        std::cout << "  ";
+    for (int boardRow = 0; boardRow < ROWS; ++boardRow) {
+      for (int cardRow = 0; cardRow < 3; ++cardRow) {
+        if (cardRow == 1) {
+          std::cout << static_cast<char>('A' + boardRow) << " ";
+        } else {
+          std::cout << "  ";
+        }
+
+        for (int boardCol = 0; boardCol < COLS; ++boardCol) {
+          // Center position (2,2) is empty
+          if (boardRow == 2 && boardCol == 2) {
+            std::cout << "    ";
+            continue;
+          }
+
+          Card *card = grid[boardRow][boardCol];
+          if (card) {
+            std::cout << card->operator()(cardRow) << " ";
+          } else {
+            std::cout << "zzz ";
+          }
+        }
+        std::cout << "\n";
       }
+    }
+    std::cout << "\n";
+  } else {
+    // Expert display mode - only show face-up cards in a row
+    std::vector<Card *> faceUpCards;
+    std::vector<std::string> positions;
 
+    // Collect all face-up cards and their positions
+    for (int boardRow = 0; boardRow < ROWS; ++boardRow) {
       for (int boardCol = 0; boardCol < COLS; ++boardCol) {
-        // Center position (2,2) is empty
+        // Skip center position (2,2)
         if (boardRow == 2 && boardCol == 2) {
-          std::cout << "    ";
           continue;
         }
 
         Card *card = grid[boardRow][boardCol];
-        if (card) {
-          if (expertMode && !card->isUncovered()) {
-            std::cout << "    "; // Don't show face-down cards in expert mode
-          } else {
-            std::cout << card->operator()(cardRow) << " ";
-          }
-        } else {
-          std::cout << "    ";
+        if (card && card->isUncovered()) {
+          faceUpCards.push_back(card);
+          // Create position string (e.g., "A1", "B2", etc.)
+          char rowChar = 'A' + boardRow;
+          int colNum = boardCol + 1;
+          positions.push_back(std::string(1, rowChar) + std::to_string(colNum));
+        }
+      }
+    }
+
+    if (faceUpCards.empty()) {
+      std::cout << "No face-up cards\n";
+      return;
+    }
+
+    // Display the face-up cards in rows (3 rows per card)
+    for (int cardRow = 0; cardRow < 3; ++cardRow) {
+      for (size_t i = 0; i < faceUpCards.size(); ++i) {
+        std::cout << faceUpCards[i]->operator()(cardRow);
+        if (i < faceUpCards.size() - 1) {
+          std::cout << " "; // Space between cards
         }
       }
       std::cout << "\n";
+    }
+
+    // Display the positions below the cards
+    for (size_t i = 0; i < positions.size(); ++i) {
+      std::cout << positions[i];
+      if (i < positions.size() - 1) {
+        // Add spacing to align with card width (3 characters + 1 space)
+        std::cout << "  "; // Two spaces to align properly
+      }
     }
     std::cout << "\n";
   }
