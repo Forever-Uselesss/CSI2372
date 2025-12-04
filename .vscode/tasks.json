@@ -1,0 +1,102 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "cppbuild",
+      "label": "C/C++: g++.exe build all files",
+      "command": "C:\\Strawberry\\c\\bin\\g++.exe",
+      "args": [
+        "-g",
+        "-std=c++17",
+        "-static-libgcc",
+        "-static-libstdc++",
+        "${workspaceFolder}\\main.cpp",
+        "${workspaceFolder}\\game.cpp",
+        "${workspaceFolder}\\player.cpp",
+        "${workspaceFolder}\\board.cpp",
+        "${workspaceFolder}\\rules.cpp",
+        "${workspaceFolder}\\card.cpp",
+        "${workspaceFolder}\\carddeck.cpp",
+        "${workspaceFolder}\\rubis.cpp",
+        "${workspaceFolder}\\rubisdeck.cpp",
+        "-o",
+        "${workspaceFolder}\\main.exe"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "Build all .cpp files in the project directory"
+    },
+    {
+      "type": "cppbuild",
+      "label": "C/C++: g++.exe generate assembly files",
+      "command": "C:\\Strawberry\\c\\bin\\g++.exe",
+      "args": [
+        "-S",
+        "-std=c++17",
+        "-O2",
+        "${workspaceFolder}\\main.cpp",
+        "${workspaceFolder}\\game.cpp",
+        "${workspaceFolder}\\player.cpp",
+        "${workspaceFolder}\\board.cpp",
+        "${workspaceFolder}\\rules.cpp",
+        "${workspaceFolder}\\card.cpp",
+        "${workspaceFolder}\\carddeck.cpp",
+        "${workspaceFolder}\\rubis.cpp",
+        "${workspaceFolder}\\rubisdeck.cpp"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$gcc"],
+      "group": "build",
+      "detail": "Generate assembly (.s) files for all .cpp files"
+    },
+    {
+      "type": "cppbuild",
+      "label": "C/C++: g++.exe generate optimized assembly",
+      "command": "C:\\Strawberry\\c\\bin\\g++.exe",
+      "args": [
+        "-S",
+        "-std=c++17",
+        "-O3",
+        "-fverbose-asm",
+        "${workspaceFolder}\\main.cpp",
+        "-o",
+        "${workspaceFolder}\\main_optimized.s"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$gcc"],
+      "group": "build",
+      "detail": "Generate highly optimized assembly with comments for main.cpp"
+    },
+    {
+      "type": "cppbuild",
+      "label": "C/C++: g++.exe generate Intel syntax assembly",
+      "command": "C:\\Strawberry\\c\\bin\\g++.exe",
+      "args": [
+        "-S",
+        "-std=c++17",
+        "-O2",
+        "-masm=intel",
+        "-fverbose-asm",
+        "${file}",
+        "-o",
+        "${fileDirname}\\${fileBasenameNoExtension}_intel.s"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$gcc"],
+      "group": "build",
+      "detail": "Generate Intel syntax assembly for current file"
+    }
+  ]
+}
